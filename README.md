@@ -1,5 +1,12 @@
+#UPDATE: 
+Still needs lots of work
+
+! [Updated Error](/images/update.png)
+
+
+
 # CLI/SQL/NODE Store App HAGATHA's APOTHECARY
-! [ Image of Hagatha herself] (/images/Hagatha.png)
+! [Image of Hagatha herself](/images/Hagatha.png)
 
 ##Intro
 This is a command line app that uses node to interact with our custom databases in MySQL. With Halloween coming up I thought I would try to add a spooky theme to this assigment in the form of a scary apothecary run by Hagatha the Witch. 
@@ -9,7 +16,7 @@ This is a command line app that uses node to interact with our custom databases 
 
 I saw this error the most in my troubleshooting: 
 
-![Error screenshot] (/images/error.png)
+![Error screenshot](/images/error.png)
 
 2. I think that my Database was setup correctly and I also think my intitial workbench setup was solid. 
 
@@ -17,7 +24,7 @@ I saw this error the most in my troubleshooting:
 
 3. The data was imported successfully to the table and in the correct format with the columns. 
 
-! [Database table] (/images/stock.png)
+! [Database table](/images/stock.png)
 
 ## JS
 

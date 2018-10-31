@@ -7,7 +7,7 @@ var connection = mysql.createConnection
    host: "localhost",
    port: 3306,
    user: "root",
-   password: "",
+   password: "password",
    database: "apothecary_DB"
  });
 
@@ -15,32 +15,25 @@ var connection = mysql.createConnection
 
  connection.connect(function(err) {
 	if (err) throw err;
-	console.log("connected as id " + connection.threadID);
-	afterConnection();
+	products();
+	
 });
 
-function afterConnection(){
-    connnection.query("SELECT * FROM products", function(err,res){
-        if(err) throw err;
-        console.log(res);
-        connection.end();
-    });
-}
-function potions () {
-	console.log();
+function products () {
+	console.log('\n Welcome to Hagatha Store \n');
 
 	inquirer.prompt([
 		{
 			type: 'confirm',
 			name: 'confirm',
-			message: "What brings you to Hagatha's Apothecary my dear? Are you in search of ingredients for a foul potion?",
+			message: "Type 'y' to see Hagatha's wares",
 			default: true
 		}
-	]).then(function(answers) {
-		if (answers.confirm) {
+	]).then(function(input) {
+		if (input.confirm) {
 			displayPotions();
 		} else {
-			console.log("You may need to return, Hallows Eve approaches and many potions must be brewed! Heheheheheh");
+			console.log('\n You may need to return, Hallows Eve approaches and many potions must be brewed! Heheheheheh\n');
 			connection.end();
 		}
 	});
@@ -52,36 +45,37 @@ function whatchaGotThere() {
 		{   type: 'input',
 			name: 'item',
 			message: 'Pick a sinister ingredient from the list by the number to buy it!',
-			validate: function pickOneAnyOne(item) {
-                        //This I was not sure on, i don't sure I know exactly what to use for the reg
-                        let reg = ;
-						return reg.test(item);
+			validate: function pickOneAnyONe(item) 
+			
+			{
+                        let reg = /^\d+$/;
+						return reg.test(item) || 'Please enter item ID number.';
 					}
 		},
 
 		{
 			type: 'input',
-			name: 'itemQuantity',
+			name: 'itemAmount',
 			message: 'How many would you like to purchase?',
 			validate: function pickOneAnyONe(itemAmount) {
                     //not sure on the reg here again 
-                        const reg = ;
-                        return reg.test(itemAmount); 
-                        console.log("How many would you like my pretty???.");
+                        const reg = /^\d+$/;
+                        return reg.test(itemAmount) || 'Only numbers, please try again.';
+                        
 					}
 		}
-	]).then(function(answers) {
+	]).then(function(input) {
 
-		let mYsql = 'SELECT from Products';
-		let buckets = ['products', 'item_id', answers.item];
-		sql = mysql.format(mYsql, buckets);
-		connection.query(mYsql, function(err, results) {
+		let sql = 'SELECT ?? FROM ?? WHERE ?? = ?';
+		let buckets = [ '*', 'products', 'item_id', answers.item];
+		sql = mysql.format(sql, buckets);
+		connection.query(sql, function(err, results) {
 			if (answers.itemQuantity <= results[0].stock_quantity) {
-				console.log("Those will make quite a potent brew my pretty! Heeheheheh"
+				console.log('\nThose will make quite a potent brew my pretty! Heeheheheh\n'
                 );
 				let adventurerAmount = results[0].stock_quantity - answers.itemQuantity;
 				let query = connection.query(
-					'UPDATE',
+					'UPDATE prodeucts SET ? WHERE ?',
 						[
 							{
 								stock_quantity: adventurerAmount
@@ -94,6 +88,11 @@ function whatchaGotThere() {
 						console.log('${results.Rows} the ledger of ingredients has changed my dear`);
 					},
 				);
+
+				orderTotal = parseFloat((results[0].price * input.itemQuantity).toFixed(2));
+				console.log(`Total: $${orderTotal}\n`);
+
+
 //Hagatha has to show her wares to the adventurer
 function displayPotions() {
 	let mYsql = 'SELECT ?? FROM ??';
